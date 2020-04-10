@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <link rel="icon" type="image/png" href="static/pistol_32.png"/>
+    <title>Host Video Mafia</title>
+    <style type="text/css">
+        body {
+            text-align: center;
+        }
+        form input {
+            text-align: center;
+            margin-bottom: 10px;
+            height: 30px;
+            border-radius: 5px;
+            font-size: large;
+        }
+        form .biglabel{
+            height: 30px;
+            display: inline-block;
+            vertical-align: middle;
+        }
+        form select {
+            text-align: center;
+            margin-bottom: 10px;
+            height: 30px;
+            border-radius: 5px;
+            font-size: large;
+        }
+        form label {
+            vertical-align: middle;
+            display: inline-block;
+            text-align: center;
+            margin-bottom: 10px;
+            height: 30px;
+            border-radius: 5px;
+            font-size: large;
+        }
+        form button {
+            margin-top: 10px;
+            font-size: x-large;
+        }
+        form p {
+            margin-bottom: 0px;
+            font-size: large;
+        }
+    </style>
+</head>
+<body>
+    <h1>Video Mafia Host</h1>
+    <form action="/start" method="post">
+        <label class="biglabel" for="numMafia">Number of Mafiosos: </label>
+        <input type="number" id="numMafia" name="numMafia" value="2"/><br/>
+
+        <input type="checkbox" id="detective" name="detective" value="true"/>
+        <label for="detective">Include Detective? (Can learn role of one player per night)</label><br/>
+
+        <input type="checkbox" id="bodyguard" name="bodyguard" value="false"/>
+        <label for="bodyguard">Include Bodyguard? (Can save one player from death per night)</label><br/>
+
+        <label class="biglabel" for="revealDead">Reveal the roles of dead players </label>
+        <select id="revealDead" name="revealDead" value="always">
+            <option value="always">Always</option>
+            <option value="whenKilled">When killed by Mafia</option>
+            <option value="whenVoted">When voted out</option>
+        </select><br/>
+
+        <button type="submit">Start Game</button>
+    </form>
+</body>
+</html>

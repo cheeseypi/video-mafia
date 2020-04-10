@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <link rel="icon" type="image/png" href="static/pistol_32.png"/>
+    <title>Video Mafia</title>
+    <style type="text/css">
+        body{
+            margin: 0px;
+            padding: 0px;
+        }
+        .banner{
+            position: absolute;
+            display: flex;
+            justify-content: space-between;
+            top: 0px;
+            left: 0px;
+            width: 100%;
+            margin: 0px;
+            padding: 0px;
+            height: 60px;
+            background-color: #36c7e0;
+            vertical-align: middle;
+            -webkit-box-shadow: 0px 3px 21px -10px rgba(0,0,0,0.75);
+            -moz-box-shadow: 0px 3px 21px -10px rgba(0,0,0,0.75);
+            box-shadow: 0px 3px 21px -10px rgba(0,0,0,0.75);
+            z-index: 99;
+        }
+        .secondbanner{
+            position: absolute;
+            display: flex;
+            justify-content: space-between;
+            top: 60px;
+            left: 0px;
+            width: 100%;
+            margin: 0px;
+            padding: 0px;
+            height: 60px;
+            background-color: #1677b0;
+            vertical-align: middle;
+            -webkit-box-shadow: 0px 3px 21px -10px rgba(0,0,0,0.75);
+            -moz-box-shadow: 0px 3px 21px -10px rgba(0,0,0,0.75);
+            box-shadow: 0px 3px 21px -10px rgba(0,0,0,0.75);
+            z-index: 98;
+        }
+        .header{
+            color: white;
+            margin-top: 15px;
+            margin-bottom: 15px;
+            height: 30px;
+            margin-left: 20px;
+            display: inline-block;
+            vertical-align: middle;
+            font-family: sans-serif;
+        }
+        .trailer{
+            color: white;
+            margin-top: 15px;
+            margin-bottom: 15px;
+            height: 30px;
+            margin-right: 20px;
+            display: inline-block;
+            vertical-align: middle;
+            font-family: sans-serif;
+            justify-content: right;
+        }
+        .content{
+            margin-top: 120px;
+            height: calc(100vh - 120px);
+            display: block;
+            background-color: white;
+            transition: background-color 1s ease-in-out, color 1s ease-in-out;
+        }
+    </style>
+</head>
+<body>
+    <div class="banner">
+        <h2 class="header">Video Mafia</h2>
+        <h2 class="trailer" id="gameid">Game ID: </h2>
+    </div>
+    <div class="secondbanner">
+        <h2 class="header" id="name"></h2>
+        <h2 class="trailer" id="roleHeader">Role: ?????</h2>
+    </div>
+    <div class="content" id="content">
+        <p>Hello, world!</p>
+    </div>
+    <script>
+        function setNighttime(){
+            var element = document.getElementById("content");
+            element.style.backgroundColor = "black";
+            element.style.color = "white";
+        }
+        function setDaytime(){
+            var element = document.getElementById("content");
+            element.style.backgroundColor = "white";
+            element.style.color = "black";
+        }
+        const params = new URLSearchParams(window.location.search);
+        document.getElementById("gameid").innerText += " "+params.get("gameid");
+        document.getElementById("name").innerText = params.get("player");
+        setTimeout(setNighttime, 2000);
+        setTimeout(setDaytime, 5000);
+    </script>
+</body>
+</html>

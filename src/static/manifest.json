@@ -1,0 +1,45 @@
+{
+  "name": "Video Mafia",
+  "short_name": "Video Mafia",
+  "description": "Play Mafia over Zoom",
+  "start_url": "/",
+  "scope": ".",
+  "background_color": "#FFF",
+  "theme_color": "#36c7e0",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "dir": "ltr",
+  "lang": "en-US",
+  "icons": [
+    {
+      "src": "pistol_512.png",
+      "type": "image/png",
+      "sizes": "512x512"
+    },
+    {
+      "src": "pistol_256.png",
+      "type": "image/png",
+      "sizes": "256x256"
+    },
+    {
+      "src": "pistol_128.png",
+      "type": "image/png",
+      "sizes": "128x128"
+    },
+    {
+      "src": "pistol_64.png",
+      "type": "image/png",
+      "sizes": "64x64"
+    },
+    {
+      "src": "pistol_32.png",
+      "type": "image/png",
+      "sizes": "32x32"
+    },
+    {
+      "src": "pistol_16.png",
+      "type": "image/png",
+      "sizes": "16x16"
+    }
+  ]
+}
