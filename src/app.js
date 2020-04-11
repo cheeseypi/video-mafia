@@ -15,10 +15,6 @@ app.route('/')
     })
 ;
 app.route('/game')
-    .post((req, res)=>{
-        var args = req.body;
-        res.redirect('?gameid='+args["gameid"]+'&player='+args["name"]);
-    })
     .get((req, res)=>{
         res.sendFile(__dirname+'/client/game.html');
     })
@@ -34,9 +30,18 @@ app.route('/start')
     })
 ;
 
+var game = io.of('/game').on('connection', socket =>{
+    socket.emit('ack');
+    socket.on('attachGame', (gameid)=>{
+        socket.join(gameid);
+        socket.emit('joinedGame', gameid);
+        socket.on('ready', (player) => {
+            console.log("Player "+player+" in game "+gameid+" is ready.")
+            socket.emit('pend');
+            socket.emit('start', 'Mafioso')
+        });
+    })
+});
+
 io.on('connection', socket => {
-    socket.emit('message', 'HEYO');
-    setTimeout(_=>{
-        socket.emit('message', 'HEY YOURSELF!');
-    }, 1000);
 });

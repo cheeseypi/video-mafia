@@ -67,24 +67,26 @@
         }
         .content{
             margin-top: 120px;
-            height: calc(100vh - 120px);
+            padding-top: 20px;
+            height: calc(100vh - 140px);
             display: block;
             background-color: white;
             transition: background-color 1s ease-in-out, color 1s ease-in-out;
+            text-align: center;
+            font-family: sans-serif;
         }
     </style>
 </head>
 <body>
     <div class="banner">
         <h2 class="header">Video Mafia</h2>
-        <h2 class="trailer" id="gameid">Game ID: </h2>
+        <h2 class="trailer">Game ID: <div id="gameid" style="display:inline"></div></h2>
     </div>
     <div class="secondbanner">
         <h2 class="header" id="name"></h2>
-        <h2 class="trailer" id="roleHeader">Role: ?????</h2>
+        <h2 class="trailer" id="roleHeader">Role: <div id="role" style="display:inline"></div></h2>
     </div>
     <div class="content" id="content">
-        <p>Hello, world!</p>
     </div>
     <script>
         function setNighttime(){
@@ -97,11 +99,119 @@
             element.style.backgroundColor = "white";
             element.style.color = "black";
         }
+        function fadeInText(element, parent, timeout = 500){
+            element.style.opacity = "0";
+            element.style.transition = "opacity 1s ease-in-out";
+            parent.appendChild(element);
+            setTimeout(function (){
+                element.style.opacity = "1";
+            }, timeout);
+        }
+        function fadeOutText(element, timeout = 500){
+            element.transition = "opacity 1s ease-in-out";
+            element.style.opacity = "0";
+            element.parentNode.removeChild(element);
+        }
+        function typeOutText(element, text, timeout = 200){
+            var remText = text;
+            function addCharacter(){
+                element.innerText = element.innerText.substring(0, element.innerText.length-1);
+                element.innerText += remText[0];
+                remText = remText.substring(1);
+                if(remText.length == 0) return;
+                element.innerText += "I";
+                setTimeout(addCharacter, timeout);
+            }
+            element.innerText = "I";
+            setTimeout(addCharacter, timeout);
+        }
         const params = new URLSearchParams(window.location.search);
-        document.getElementById("gameid").innerText += " "+params.get("gameid");
-        document.getElementById("name").innerText = params.get("player");
-        setTimeout(setNighttime, 2000);
-        setTimeout(setDaytime, 5000);
+        typeOutText(document.getElementById('name'), params.get("player"));
+        //setTimeout(setNighttime, 2000);
+        //setTimeout(setDaytime, 5000);
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.0/socket.io.js"></script>
+    <script>
+        var socket = io.connect(window.location.origin+"/game");
+        var joined = false;
+        socket.on('ack', function(){
+            socket.emit('attachGame', params.get("gameid"));
+            socket.on('joinedGame', function(gameid) {
+                if(joined) return;
+                joined = true;
+
+                typeOutText(document.getElementById('gameid'), gameid);
+
+                var newTag = document.createElement('h2');
+                newTag.innerText = "Hello";
+                fadeInText(newTag, document.getElementById('content'), 1000);
+                setTimeout(function (){
+                    var welcome = document.createElement('h1');
+                    welcome.innerText = "Welcome to Mafia";
+                    fadeInText(welcome, document.getElementById('content'), 1500);
+                    setTimeout(function (){
+                        setNighttime();
+                        var ready = document.createElement('h1');
+                        ready.innerText = "Are you ready?";
+                        fadeInText(ready, document.getElementById('content'), 1500);
+                        setTimeout(function (){
+                            var yes = document.createElement('button');
+                            yes.type = "button";
+                            yes.innerText = "Yes";
+                            yes.style.marginTop = "20px;";
+                            yes.style.fontSize = "x-large";
+                            yes.onclick = function (){
+                                socket.emit('ready', params.get("player"))
+                            };
+                            fadeInText(yes, document.getElementById('content', 1000))
+                        }, 2500);
+                    }, 3000);
+                }, 1000);
+            });
+            var starting = false;
+            var pending = false;
+            socket.on('pend', function(){
+                if(starting)return;
+                pending = true;
+                setDaytime();
+                setTimeout(function (){
+                    if(starting)return;
+                    var content = document.getElementById('content');
+                    content.style.transition = "opacity 1s";
+                    content.style.opacity = "0";
+                    setTimeout(function (){
+                        if(starting)return;
+                        content.innerHTML = "";
+                        content.style.transition = "opacity 0s";
+                        content.style.opacity = "1";
+                        var wait = document.createElement('h1');
+                        wait.innerText = "Please Wait...";
+                        fadeInText(wait, content);
+                    }, 1000)
+                }, 1000);
+            });
+            socket.on('start', function(role){
+                starting = true;
+                setDaytime();
+                function startRole(){
+                    var content = document.getElementById('content');
+                    content.style.transition = "opacity 1s";
+                    content.style.opacity = "0";
+                    setTimeout(function (){
+                        content.innerHTML = "";
+                        content.style.transition = "opacity 0s";
+                        content.style.opacity = "1";
+                        //document.getElementById('role').innerText = role;
+                        typeOutText(document.getElementById('role'), role);
+                    }, 1000);
+                }
+                if(pending){
+                    setTimeout(startRole, 1000)
+                } else{
+                    startRole();
+                }
+            });
+        });
     </script>
 </body>
 </html>
